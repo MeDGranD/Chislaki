@@ -8,10 +8,11 @@ import java.io.IOException;
 
 public class MatrixJSONLoader {
 
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class SLAU {
-        public Double[][] matrix;
-        public Double[] b;
+        public double[][] matrix;
+        public double[] b;
     }
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Accuracy {
@@ -22,12 +23,6 @@ public class MatrixJSONLoader {
     public static SLAU loadSLAU(String filePath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(new File(filePath), SLAU.class);
-    }
-
-    public static Matrix loadMatrix(String filePath) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Double[][] data = objectMapper.readValue(new File(filePath), Double[][].class);
-        return new Matrix(data);
     }
 
     public static Accuracy loadAccuracy(String filePath) throws IOException {
