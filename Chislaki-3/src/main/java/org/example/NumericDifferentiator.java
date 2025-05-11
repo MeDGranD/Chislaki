@@ -1,0 +1,68 @@
+package org.example;
+
+import lombok.NonNull;
+import org.example.Interpolation.InterpolationPoint;
+
+import java.util.List;
+
+public class NumericDifferentiator {
+
+    @NonNull
+    private final List<InterpolationPoint> points;
+
+    public NumericDifferentiator(List<InterpolationPoint> points){
+        this.points = points;
+        for (int i = 0; i < points.size() - 1; i++) {
+            double h = points.get(i + 1).getX() - points.get(i).getX();
+            if (h <= 0) {
+                throw new IllegalArgumentException("X values must be strictly increasing.");
+            }
+        }
+    }
+
+    private int findNodeIndex(double x) {
+        int i;
+        if(x < points.getFirst().getX()){
+            i = 0;
+        }
+        else if(x > points.getLast().getX()){
+            i = points.size() - 2;
+        }
+        else{
+            for (i = 0; i < points.size() - 1; i++) {
+                double left = points.get(i).getX();
+                double right = points.get(i + 1).getX();
+                if (x >= left && x <= right) {
+                    break;
+                }
+            }
+        }
+        return i;
+    }
+
+    public double[] calculateCentralDerivativesAtNode(double x) {
+        int i = findNodeIndex(x);
+
+        double y_i = points.get(i).getY();
+        double y_i_plus_1 = points.get(i + 1).getY();
+
+
+        double x_i = points.get(i).getX();
+        double x_i_plus_1 = points.get(i + 1).getX();
+
+        if(i == points.size() - 2){
+            return new double[]{(y_i_plus_1 - y_i) / (x_i_plus_1 - x_i)};
+        }
+
+        double x_i_plus_2 = points.get(i + 2).getX();
+        double y_i_plus_2 = points.get(i + 2).getY();
+
+        double v = (y_i_plus_2 - y_i_plus_1) / (x_i_plus_2 - x_i_plus_1) - (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i);
+
+        double firstDerivative = (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i) + v / (x_i_plus_2 - x_i) * (2 * x - x_i - x_i_plus_1);
+        double secondDerivative = 2 * v / (x_i_plus_2 - x_i);
+
+        return new double[]{firstDerivative, secondDerivative};
+    }
+
+}
