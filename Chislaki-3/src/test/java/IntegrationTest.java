@@ -38,7 +38,7 @@ public class IntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void testAddition(TestCase testCase) {
+    void testAddition(TestCase testCase) { //TODO: добавить вычисление k + ошибка пр неправильном шаге
         NumericalIntegrator rectInt = new RectangleIntegrator();
         NumericalIntegrator trapInt = new TrapezoidIntegrator();
         NumericalIntegrator simpInt = new SimpsonIntegrator();
@@ -49,7 +49,7 @@ public class IntegrationTest {
                 rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1),
                 rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2),
                 2,
-                1
+                2
         ));
 
         System.out.println();

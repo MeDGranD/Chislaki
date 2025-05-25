@@ -2,7 +2,7 @@
   {
     "tolerance": 0.00001,
     "maxIter": 100,
-    "startSimple": [0, 0],
-    "startNewton": [0, 0]
+    "startSimple": [1, 2],
+    "startNewton": [1, 2]
   }
 ]

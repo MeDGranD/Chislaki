@@ -40,7 +40,8 @@ public class SystemTest {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void testAddition(TestCase testCase){
+    void testAddition(TestCase testCase){ //TODO: также выводить кол-во итераций и q
+        //Добавить отрез и для систем
 
         @SuppressWarnings("unchecked")
         double[] ans = SystemNewtonSolver.getRoots(

@@ -8,6 +8,9 @@ public class SZSVResolver {
 
     public static RealMatrix[] getSZSV(RealMatrix mat, double tol, int maxIter){
 
+        if(mat.getRowDimension() == 0 || mat.getColumnDimension() == 0 || mat.getColumnDimension() != mat.getRowDimension())
+            throw new IllegalArgumentException("Неверные размеры матрицы");
+
         int rows = mat.getRowDimension();
         int cols = mat.getColumnDimension();
 
@@ -39,14 +42,14 @@ public class SZSVResolver {
             U.setEntry(i, j, -Math.sin(phi));
             U.setEntry(j, i, Math.sin(phi));
 
-            RealMatrix mA = mat.copy(), mU = U.copy();
+            RealMatrix mA = mat.copy();
             if(ansU == null){
-                ansU = mU;
+                ansU = U;
             }
             else{
-                ansU = ansU.multiply(mU);
+                ansU = ansU.multiply(U);
             }
-            mat = mU.transpose().multiply(mA).multiply(mU);
+            mat = U.transpose().multiply(mA).multiply(U);
 
             //Вычисления критерия остановки
             double sum = 0;
@@ -57,6 +60,7 @@ public class SZSVResolver {
                     }
                 }
             }
+            sum = Math.sqrt(sum);
             if(sum < tol){
                 break;
             }

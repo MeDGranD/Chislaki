@@ -83,7 +83,7 @@ public class CubicSplineInterpolator implements Interpolator{
     }
 
     @Override
-    public double interpolate(double x) {
+    public double interpolate(double x) { //TODO: Убрать значение вне отрезка
 
         int i;
         if(x < points.getFirst().getX()){
@@ -106,7 +106,7 @@ public class CubicSplineInterpolator implements Interpolator{
     }
 
     @Override
-    public void printPolynomial() {
+    public void printPolynomial() { //TODO: Построить графики
         System.out.println("Cubic spline interpolation polynomials (one per interval):");
 
         for (int i = 0; i < h.length; i++) {
@@ -116,11 +116,11 @@ public class CubicSplineInterpolator implements Interpolator{
             sb.append(String.format("S_%d(x) = ", i));
             sb.append(String.format("%.4f", a[i]));
 
-            if (Math.abs(b[i]) > 1e-12)
+            //if (Math.abs(b[i]) > 1e-12)
                 sb.append(String.format(" + %.4f*(x - %.4f)", b[i], xi));
-            if (Math.abs(c[i]) > 1e-12)
+            //if (Math.abs(c[i]) > 1e-12)
                 sb.append(String.format(" + %.4f*(x - %.4f)^2", c[i], xi));
-            if (Math.abs(d[i]) > 1e-12)
+            //if (Math.abs(d[i]) > 1e-12)
                 sb.append(String.format(" + %.4f*(x - %.4f)^3", d[i], xi));
 
             System.out.println(sb);

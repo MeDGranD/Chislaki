@@ -42,7 +42,7 @@ public class DiffTest {
 
         NumericDifferentiator differentiator = new NumericDifferentiator(points);
 
-        System.out.println(Arrays.toString(differentiator.calculateCentralDerivativesAtNode(testCase.xVal)));
+        System.out.println(Arrays.toString(differentiator.calculateAtNode(testCase.xVal)));
 
     }
 

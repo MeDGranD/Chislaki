@@ -11,7 +11,7 @@ public class NewtonSolver{
         return x -> (f.apply(x + 1e-5) - f.apply(x - 1e-5)) / (2 * 1e-5);
     }
 
-    public static double getRoot(
+    public static double getRoot( //TODO: проверять монотонность в границах и другие условия существования корня
             Function<Double, Double> func,
             double start,
             double tolerance,
@@ -19,8 +19,7 @@ public class NewtonSolver{
     ){
 
         if(func.apply(start) * differentiate(differentiate(func)).apply(start) <= 0){
-            System.out.println(func.apply(start) * differentiate(differentiate(func)).apply(start));
-            throw new RuntimeException("Error");
+            System.out.println("Возможно ответ в Ньютоне не сойдется");
         }
 
         double xVal = start;
@@ -32,7 +31,7 @@ public class NewtonSolver{
             double oldX = xVal;
             xVal = xVal - func.apply(xVal) / differentiate(func).apply(xVal);
 
-            error = Math.abs(oldX- xVal);
+            error = Math.abs(oldX - xVal);
 
         }
 

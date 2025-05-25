@@ -12,7 +12,7 @@ public class LagrangeInterpolator implements Interpolator{
     private final List<InterpolationPoint> points;
 
     @Override
-    public double interpolate(double x) {
+    public double interpolate(double x) { //TODO: добавить проверки на вхождение
 
         double lagrangePolynomialValue = 0.0;
         int n = points.size();

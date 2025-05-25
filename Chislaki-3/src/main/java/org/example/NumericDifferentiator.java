@@ -2,13 +2,20 @@ package org.example;
 
 import lombok.NonNull;
 import org.example.Interpolation.InterpolationPoint;
+import org.example.Interpolation.NewtonInterpolator;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class NumericDifferentiator {
 
     @NonNull
     private final List<InterpolationPoint> points;
+    private final NewtonInterpolator interpolator;
+
+    private static Function<Double, Double> differentiate(Function<Double, Double> f){
+        return x -> (f.apply(x + 1e-5) - f.apply(x - 1e-5)) / (2 * 1e-5);
+    }
 
     public NumericDifferentiator(List<InterpolationPoint> points){
         this.points = points;
@@ -18,18 +25,19 @@ public class NumericDifferentiator {
                 throw new IllegalArgumentException("X values must be strictly increasing.");
             }
         }
+        this.interpolator = new NewtonInterpolator(points);
     }
 
     private int findNodeIndex(double x) {
-        int i;
+        int i = 0;
         if(x < points.getFirst().getX()){
-            i = 0;
+            throw new IllegalArgumentException("Out of range");
         }
         else if(x > points.getLast().getX()){
-            i = points.size() - 2;
+            throw new IllegalArgumentException("Out of range");
         }
         else{
-            for (i = 0; i < points.size() - 1; i++) {
+            for (; i < points.size() - 1; i++) {
                 double left = points.get(i).getX();
                 double right = points.get(i + 1).getX();
                 if (x >= left && x <= right) {
@@ -40,7 +48,13 @@ public class NumericDifferentiator {
         return i;
     }
 
-    public double[] calculateCentralDerivativesAtNode(double x) {
+    public double[] calculateAtNode(double x) { //TODO: объяснить выводы = подписи
+
+        /*return new double[] {
+                differentiate(interpolator::interpolate).apply(x),
+                differentiate(differentiate((interpolator::interpolate))).apply(x)
+        };*/
+
         int i = findNodeIndex(x);
 
         double y_i = points.get(i).getY();
@@ -50,7 +64,7 @@ public class NumericDifferentiator {
         double x_i = points.get(i).getX();
         double x_i_plus_1 = points.get(i + 1).getX();
 
-        if(i == points.size() - 2){
+        if(i >= points.size() - 2){
             return new double[]{(y_i_plus_1 - y_i) / (x_i_plus_1 - x_i)};
         }
 

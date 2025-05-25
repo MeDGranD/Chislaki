@@ -62,6 +62,7 @@ public class MatrixTests {
         RealVector answer = resolver.solveLU(SLAU.b);
 
         System.out.println("Заданная матрица:\n" + matrixToString(resolver.getData()) + '\n');
+        System.out.println("Правая часть:\n"+Arrays.toString(SLAU.b) + "\n");
         System.out.println("L матрица:\n" + matrixToString(mats[0]) + '\n');
         System.out.println("U матрица:\n" + matrixToString(mats[1]) + '\n');
         System.out.println("Корни x: "+ vectorToString(answer) + '\n');
@@ -79,6 +80,7 @@ public class MatrixTests {
         RealVector answer = TriagonalResolver.solveTridiagonal(mat, SLAU.b);
 
         System.out.println("Заданная матрица:\n" + matrixToString(mat) + '\n');
+        System.out.println("Правая часть:\n"+Arrays.toString(SLAU.b) + "\n");
         System.out.println("Корни x: " + vectorToString(answer));
         System.out.println(vectorToString(mat.operate(answer)) + '\n');
 
@@ -94,6 +96,7 @@ public class MatrixTests {
         RealVector answerSeidel = IterationResolver.solveSeidel(mat, SLAU.b, accuracy.tol, accuracy.maxIter);
 
         System.out.println("Заданная матрица:\n" + matrixToString(mat) + '\n');
+        System.out.println("Правая часть:\n"+Arrays.toString(SLAU.b) + "\n");
         System.out.println("Корни x(простыми итерациями): " + vectorToString(answerSimple));
         System.out.println(vectorToString(mat.operate(answerSimple)) + '\n');
         System.out.println("Корни x(Зейдель): " + vectorToString(answerSeidel));

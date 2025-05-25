@@ -33,7 +33,7 @@ public class SimpleIterationSolver{
                 throw new RuntimeException("Error");
             }
 
-            q = Math.max(Math.abs(differentiate(func).apply(a)), q);
+            q = Math.max(Math.abs(differentiate(func).apply(a)), q); //Всегда выводить в конце
 
             a += step;
         }

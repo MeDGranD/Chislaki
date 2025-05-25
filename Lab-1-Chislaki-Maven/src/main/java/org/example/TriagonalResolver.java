@@ -6,6 +6,8 @@ import org.apache.commons.math3.linear.RealVector;
 
 public class TriagonalResolver {
 
+    private static double null_exp = 1e-12;
+
     public static RealVector solveTridiagonal(RealMatrix mat, double[] d) {
 
         if(mat.getRowDimension() == 0 || mat.getColumnDimension() == 0 || mat.getColumnDimension() != mat.getRowDimension())
@@ -19,7 +21,7 @@ public class TriagonalResolver {
         //Окно для обработки матрицы
         int a = -1,b = 0,c = 1;
 
-        if (Math.abs(mat.getEntry(0, 0)) < 1e-12) {  // Достаточное условие для первого элемента
+        if (Math.abs(mat.getEntry(0, 0)) < null_exp) {  // Достаточное условие для первого элемента
             throw new RuntimeException("Перый диагональный элемент слишком мал или равен нулю");
         }
 
@@ -30,10 +32,8 @@ public class TriagonalResolver {
         for (int i = 1; i < n - 1; i++) {
             ++a; ++b; ++c;
             double denom = mat.getEntry(i, b) + mat.getEntry(i, a) * P[i - 1];
-            if (Math.abs(denom) < 1e-12)  // Проверка знаменателя на вырожденность
+            if (Math.abs(denom) < null_exp)  // Проверка знаменателя на вырожденность
                 throw new RuntimeException("Система вырождена или требует особого подхода на шаге " + i);
-            if(denom == 0)
-                throw new RuntimeException("Невозможно вычислить");
             P[i] = -mat.getEntry(i, c) / denom;
             Q[i] = (d[i] - mat.getEntry(i, a) * Q[i - 1]) / denom;
         }
@@ -43,7 +43,7 @@ public class TriagonalResolver {
         double b_last = mat.getEntry(last, last);
         double denom_last = b_last + a_last * P[last-1];
 
-        if (Math.abs(denom_last) < 1e-12) {  // Доп проверка знаменателя для последней строки
+        if (Math.abs(denom_last) < null_exp) {  // Доп проверка знаменателя для последней строки
             throw new RuntimeException("Система вырождена в последней строке");
         }
 

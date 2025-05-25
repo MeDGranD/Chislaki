@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public class SystemSimpleIterationSolver{
 
-    public static double[] getRoots(
+    public static double[] getRoots( //TODO: добавить q и проверки
             Function<double[], Double>[] phi_functions,
             double[] initialGuess,
             double tolerance,

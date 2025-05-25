@@ -41,7 +41,7 @@ public class SingleTest {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void testAddition(TestCase testCase) {
+    void testAddition(TestCase testCase) { //TODO: выводить кол-во итераций и проверка
 
         double xVal = SimpleIterationSolver.getRoot(
                 func,
