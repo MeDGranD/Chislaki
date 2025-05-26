@@ -85,14 +85,10 @@ public class CubicSplineInterpolator implements Interpolator{
     @Override
     public double interpolate(double x) { //TODO: Убрать значение вне отрезка
 
+        if(x < points.getFirst().getX() || x > points.getLast().getX())
+            throw new IllegalArgumentException(String.format("Значение x должно быть в пределах от %f до %f", points.getFirst().getX(), points.getLast().getX()));
+
         int i;
-        if(x < points.getFirst().getX()){
-            i = 0;
-        }
-        else if(x > points.getLast().getX()){
-            i = h.length - 1;
-        }
-        else{
             for (i = 0; i < points.size() - 1; i++) {
                 double left = points.get(i).getX();
                 double right = points.get(i + 1).getX();
@@ -100,7 +96,6 @@ public class CubicSplineInterpolator implements Interpolator{
                     break;
                 }
             }
-        }
 
         return a[i] + b[i] * (x - points.get(i).getX()) + c[i] * Math.pow((x - points.get(i).getX()), 2) + d[i] * Math.pow((x - points.get(i).getX()), 3);
     }

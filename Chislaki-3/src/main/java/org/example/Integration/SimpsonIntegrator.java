@@ -6,7 +6,7 @@ public class SimpsonIntegrator implements NumericalIntegrator{
 
     @Override
     public double integrate(Function<Double, Double> func, double a, double b, double h) {
-        double sum = 0.0;
+        double sum = 0.0, oldA = a;
         a += h;
         if(a > b){
             throw new IllegalArgumentException("a cannot be bigger than b.");
@@ -17,8 +17,7 @@ public class SimpsonIntegrator implements NumericalIntegrator{
             a += h;
 
             if(a > b && a - h != b){
-                sum += func.apply(b) + func.apply(b - h) + 4 * func.apply((2 * b - h) / 2);
-                break;
+                throw new IllegalArgumentException(String.format("Указан неправильный шаг: нельзя целочисленно разбить промежуток [%f, %f] на шаги %f", oldA, b, h));
             }
 
         }

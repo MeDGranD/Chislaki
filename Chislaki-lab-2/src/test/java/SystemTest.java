@@ -19,6 +19,10 @@ public class SystemTest {
         double tolerance;
         @JsonProperty("maxIter")
         int maxIter;
+        @JsonProperty("a")
+        double[] a;
+        @JsonProperty("b")
+        double[] b;
         @JsonProperty("startSimple")
         double[] startSimple;
         @JsonProperty("startNewton")
@@ -46,6 +50,8 @@ public class SystemTest {
         @SuppressWarnings("unchecked")
         double[] ans = SystemNewtonSolver.getRoots(
                 testCase.startNewton,
+                testCase.a,
+                testCase.b,
                 new Function[]{func1, func2},
                 testCase.tolerance,
                 testCase.maxIter
@@ -64,6 +70,8 @@ public class SystemTest {
         @SuppressWarnings("unchecked")
         double[] ansS = SystemSimpleIterationSolver.getRoots(
                 new Function[]{func1S, func2S},
+                testCase.a,
+                testCase.b,
                 testCase.startSimple,
                 testCase.tolerance,
                 testCase.maxIter

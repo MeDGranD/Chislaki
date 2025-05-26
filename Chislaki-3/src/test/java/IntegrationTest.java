@@ -38,39 +38,65 @@ public class IntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    void testAddition(TestCase testCase) { //TODO: добавить вычисление k + ошибка пр неправильном шаге
+    void testAddition(TestCase testCase) { //TODO: добавить вычисление k + ошибка при неправильном шаге
         NumericalIntegrator rectInt = new RectangleIntegrator();
         NumericalIntegrator trapInt = new TrapezoidIntegrator();
         NumericalIntegrator simpInt = new SimpsonIntegrator();
 
-        System.out.println(rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1));
-        System.out.println(rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2));
-        System.out.println(ErrorEstimator.estimateRungeRombergError(
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом прямоугольников с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h1,
+                rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1)
+        );
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом прямоугольников с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h2,
+                rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2)
+        );
+        System.out.printf("Уточненный интеграл на основе метода Рунге-Ромберга: %f\n\n", ErrorEstimator.estimateRungeRombergError(
                 rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1),
                 rectInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2),
-                2,
+                testCase.h1 / testCase.h2,
                 2
         ));
 
-        System.out.println();
-
-        System.out.println(trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1));
-        System.out.println(trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2));
-        System.out.println(ErrorEstimator.estimateRungeRombergError(
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом трапеций с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h1,
+                trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1)
+        );
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом трапеций с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h2,
+                trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2)
+        );
+        System.out.printf("Уточненный интеграл на основе метода Рунге-Ромберга: %f\n\n", ErrorEstimator.estimateRungeRombergError(
                 trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1),
                 trapInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2),
-                2,
+                testCase.h1 / testCase.h2,
                 2
         ));
 
-        System.out.println();
-
-        System.out.println(simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1));
-        System.out.println(simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2));
-        System.out.println(ErrorEstimator.estimateRungeRombergError(
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом Симпсона с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h1,
+                simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1)
+        );
+        System.out.printf("Значение определенного интеграла на интервале [%f, %f] вычисленнго методом Симпсона с шагом %f: %f\n",
+                testCase.X0,
+                testCase.Xk,
+                testCase.h2,
+                simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2)
+        );
+        System.out.printf("Уточненный интеграл на основе метода Рунге-Ромберга: %f\n\n", ErrorEstimator.estimateRungeRombergError(
                 simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h1),
                 simpInt.integrate(function, testCase.X0, testCase.Xk, testCase.h2),
-                2,
+                testCase.h1 / testCase.h2,
                 4
         ));
 

@@ -14,6 +14,9 @@ public class LagrangeInterpolator implements Interpolator{
     @Override
     public double interpolate(double x) { //TODO: добавить проверки на вхождение
 
+        if(x < points.getFirst().getX() || x > points.getLast().getX())
+            throw new IllegalArgumentException(String.format("Значение x должно быть в пределах от %f до %f", points.getFirst().getX(), points.getLast().getX()));
+
         double lagrangePolynomialValue = 0.0;
         int n = points.size();
 

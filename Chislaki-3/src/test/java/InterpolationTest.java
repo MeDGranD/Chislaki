@@ -53,13 +53,14 @@ public class InterpolationTest {
         double NPoint = NewInter.interpolate(testCase.xVal);
         double TruePoint = function.apply(testCase.xVal);
 
-        System.out.println(TruePoint);
+        System.out.printf("Истинное значение в точке X = %f: %f\n--------------------------\n", testCase.xVal, TruePoint);
         LagInter.printPolynomial();
-        System.out.println(LPoint);
-        System.out.println(Math.abs(LPoint-TruePoint));
+        System.out.printf("Значение в точке X = %f, используя интерполяцию Лагранжа: %f\n", testCase.xVal, LPoint);
+        System.out.printf("Разница меньше истинным и вычисленным значением: %f\n\n", Math.abs(LPoint-TruePoint));
+
         NewInter.printPolynomial();
-        System.out.println(NPoint);
-        System.out.println(Math.abs(NPoint-TruePoint));
+        System.out.printf("Значение в точке X = %f, используя интерполяцию Ньютона: %f\n", testCase.xVal, NPoint);
+        System.out.printf("Разница меньше истинным и вычисленным значением: %f\n", Math.abs(NPoint-TruePoint));
 
     }
 

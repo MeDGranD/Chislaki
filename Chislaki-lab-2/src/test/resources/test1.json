@@ -2,7 +2,7 @@
   {
     "tolerance": 0.00001,
     "maxIter": 100,
-    "a": 0,
+    "a": 0.4,
     "b": 1,
     "startSimple": 0.5,
     "startNewton": 1
@@ -11,7 +11,7 @@
     "tolerance": 0.00001,
     "maxIter": 100,
     "a": -10,
-    "b": 10,
+    "b": 8,
     "startSimple": 1.5,
     "startNewton": 4
   }

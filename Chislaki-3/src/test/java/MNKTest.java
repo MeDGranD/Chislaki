@@ -41,10 +41,10 @@ public class MNKTest {
         LeastSquaresApproximator approximator2 = new LeastSquaresApproximator(points3, 2);
         LeastSquaresApproximator approximator3 = new LeastSquaresApproximator(points3, 3);
 
-        System.out.println(Arrays.toString(approximator2.getCoefs()));
-        System.out.println(approximator2.squareError());
-        System.out.println(Arrays.toString(approximator3.getCoefs()));
-        System.out.println(approximator3.squareError());
+        System.out.printf("Коэффициенты разложения: %s\n", Arrays.toString(approximator2.getCoefs()));
+        System.out.printf("Значение квадратичной ошибки: %s\n", approximator2.squareError());
+        System.out.printf("\nКоэффициенты разложения: %s\n", Arrays.toString(approximator3.getCoefs()));
+        System.out.printf("Значение квадратичной ошибки: %s\n", approximator3.squareError());
 
     }
 

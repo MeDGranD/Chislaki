@@ -42,7 +42,11 @@ public class DiffTest {
 
         NumericDifferentiator differentiator = new NumericDifferentiator(points);
 
-        System.out.println(Arrays.toString(differentiator.calculateAtNode(testCase.xVal)));
+        var diffs = differentiator.calculateAtNode(testCase.xVal);
+        System.out.printf("Первая производная в точке X = %f равна: %f\n", testCase.xVal, diffs[0]);
+        if(diffs.length > 1){
+            System.out.printf("Вторая производная в точке X = %f равна: %f\n", testCase.xVal, diffs[1]);
+        }
 
     }
 

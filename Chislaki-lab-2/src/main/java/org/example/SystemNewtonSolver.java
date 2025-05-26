@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 public class SystemNewtonSolver{
 
+    private static final int MON_ITER = 1000;
+
     private static Function<double[], Double> differentiate(Function<double[], Double> f, int i) {
         return point -> {
             double[] xhPlus = point.clone();
@@ -26,6 +28,8 @@ public class SystemNewtonSolver{
 
     public static double[] getRoots(
             double[] start,
+            double[] a,
+            double[] b,
             Function<double[], Double>[] funcs,
             double tolerance,
             int maxIter
@@ -38,6 +42,26 @@ public class SystemNewtonSolver{
         jacobian[0][1] = differentiate(funcs[0], 1);
         jacobian[1][0] = differentiate(funcs[1], 0);
         jacobian[1][1] = differentiate(funcs[1], 1);
+
+        double stepA = (a[1] - a[0]) / MON_ITER;
+        double stepB = (b[1] - b[0]) / MON_ITER;
+        double currentA = a[0], currentB = b[0];
+
+        while(currentA <= a[1]){
+            while(currentB <= b[1]){
+
+                double[][] val = new double[funcs.length][funcs.length];
+                for(int i = 0; i < funcs.length; ++i){
+                    for(int j = 0; j < funcs.length; ++j){
+                        val[i][j] = jacobian[i][j].apply(new double[]{currentA, currentB});
+                    }
+                    if(new Array2DRowRealMatrix(val).getNorm() == 0)
+                        System.err.println("Возможно ответ в простых итерациях не сойдется");
+                }
+                currentB += stepB;
+            }
+            currentA += stepA;
+        }
 
         DecompositionSolver solver;
 
@@ -67,6 +91,7 @@ public class SystemNewtonSolver{
 
         }
 
+        System.out.printf("Корень был найден за %d итераций с конечной ошибкой %f\n", iter, error);
         return start;
 
     }

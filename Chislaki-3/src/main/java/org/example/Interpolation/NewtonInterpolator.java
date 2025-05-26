@@ -45,6 +45,9 @@ public class NewtonInterpolator implements Interpolator{
     @Override
     public double interpolate(double x) {
 
+        if(x < points.getFirst().getX() || x > points.getLast().getX())
+            throw new IllegalArgumentException(String.format("Значение x должно быть в пределах от %f до %f", points.getFirst().getX(), points.getLast().getX()));
+
         int n = points.size();
 
         double newtonPolynomialValue = dividedDifferences[0];

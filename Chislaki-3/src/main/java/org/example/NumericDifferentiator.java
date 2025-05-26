@@ -19,6 +19,8 @@ public class NumericDifferentiator {
 
     public NumericDifferentiator(List<InterpolationPoint> points){
         this.points = points;
+        if(points.size() < 3)
+            throw new IllegalArgumentException("Points array must be greater than 3");
         for (int i = 0; i < points.size() - 1; i++) {
             double h = points.get(i + 1).getX() - points.get(i).getX();
             if (h <= 0) {
@@ -55,28 +57,92 @@ public class NumericDifferentiator {
                 differentiate(differentiate((interpolator::interpolate))).apply(x)
         };*/
 
+        double y_i, y_i_plus_1, y_i_minus_1, y_i_plus_2, y_i_minus_2;
+        double x_i, x_i_plus_1, x_i_minus_1, x_i_plus_2, x_i_minus_2;
+
         int i = findNodeIndex(x);
 
-        double y_i = points.get(i).getY();
-        double y_i_plus_1 = points.get(i + 1).getY();
+        if(points.size() == 3){
+            if(i == 0){
+
+                y_i = points.get(i).getY();
+                y_i_plus_1 = points.get(i + 1).getY();
 
 
-        double x_i = points.get(i).getX();
-        double x_i_plus_1 = points.get(i + 1).getX();
+                x_i = points.get(i).getX();
+                x_i_plus_1 = points.get(i + 1).getX();
 
-        if(i >= points.size() - 2){
-            return new double[]{(y_i_plus_1 - y_i) / (x_i_plus_1 - x_i)};
+                return new double[]{(y_i_plus_1 - y_i) / (x_i_plus_1 - x_i)};
+            }
+            else{
+                y_i = points.get(i).getY();
+                y_i_minus_1 = points.get(i - 1).getY();
+
+
+                x_i = points.get(i).getX();
+                x_i_minus_1 = points.get(i - 1).getX();
+
+                return new double[]{(y_i_minus_1 - y_i) / (x_i_minus_1 - x_i)};
+            }
         }
 
-        double x_i_plus_2 = points.get(i + 2).getX();
-        double y_i_plus_2 = points.get(i + 2).getY();
+        if(i == 0){
 
-        double v = (y_i_plus_2 - y_i_plus_1) / (x_i_plus_2 - x_i_plus_1) - (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i);
+            y_i = points.get(i).getY();
+            y_i_plus_1 = points.get(i + 1).getY();
 
-        double firstDerivative = (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i) + v / (x_i_plus_2 - x_i) * (2 * x - x_i - x_i_plus_1);
-        double secondDerivative = 2 * v / (x_i_plus_2 - x_i);
 
-        return new double[]{firstDerivative, secondDerivative};
+            x_i = points.get(i).getX();
+            x_i_plus_1 = points.get(i + 1).getX();
+
+            x_i_plus_2 = points.get(i + 2).getX();
+            y_i_plus_2 = points.get(i + 2).getY();
+
+            double v = (y_i_plus_2 - y_i_plus_1) / (x_i_plus_2 - x_i_plus_1) - (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i);
+
+            double firstDerivative = (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i) + v / (x_i_plus_2 - x_i) * (2 * x - x_i - x_i_plus_1);
+            double secondDerivative = 2 * v / (x_i_plus_2 - x_i);
+
+            return new double[]{firstDerivative, secondDerivative};
+
+        }
+        else if(i == points.size() - 1){
+            y_i = points.get(i).getY();
+            y_i_minus_1 = points.get(i - 1).getY();
+
+
+            x_i = points.get(i).getX();
+            x_i_minus_1 = points.get(i - 1).getX();
+
+            x_i_minus_2 = points.get(i - 2).getX();
+            y_i_minus_2 = points.get(i - 2).getY();
+
+            double v = (y_i - y_i_minus_1) / (x_i - x_i_minus_1) - (y_i_minus_1 - y_i_minus_2) / (x_i_minus_1 - x_i_minus_2);
+
+            double firstDerivative = (y_i_minus_1 - y_i_minus_2) / (x_i_minus_1 - x_i_minus_2) + v / (x_i - x_i_minus_2) * (2 * x - x_i_minus_2 - x_i_minus_1);
+            double secondDerivative = 2 * v / (x_i - x_i_minus_2);
+
+            return new double[]{firstDerivative, secondDerivative};
+        }
+        else{
+            y_i = points.get(i).getY();
+            y_i_minus_1 = points.get(i - 1).getY();
+
+
+            x_i = points.get(i).getX();
+            x_i_minus_1 = points.get(i - 1).getX();
+
+            x_i_plus_1 = points.get(i + 1).getX();
+            y_i_plus_1 = points.get(i + 1).getY();
+
+            double v = (y_i_plus_1 - y_i) / (x_i_plus_1 - x_i) - (y_i - y_i_minus_1) / (x_i - x_i_minus_1);
+
+            double firstDerivative = (y_i - y_i_minus_1) / (x_i - x_i_minus_1) + v / (x_i_plus_1 - x_i_minus_1) * (2 * x - x_i_minus_1 - x_i);
+            double secondDerivative = 2 * v / (x_i_plus_1 - x_i_minus_1);
+
+            return new double[]{firstDerivative, secondDerivative};
+
+        }
     }
 
 }

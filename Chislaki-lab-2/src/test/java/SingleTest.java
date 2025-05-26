@@ -56,6 +56,8 @@ public class SingleTest {
 
         xVal = NewtonSolver.getRoot(
                 funcN,
+                testCase.a,
+                testCase.b,
                 testCase.startNewton,
                 testCase.tolerance,
                 testCase.maxIter

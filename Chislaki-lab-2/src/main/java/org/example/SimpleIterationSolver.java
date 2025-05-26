@@ -23,14 +23,27 @@ public class SimpleIterationSolver{
     ){
 
         double step = (b - a) / MON_ITER;
+        double oldVal = func.apply(a) - a;
+        double sgn = Math.signum(func.apply(a+1e-5) - (a+1e-5) - (func.apply(a) - a));
         double q = 0;
         double startA = a;
+
+        if(Math.signum(oldVal) + Math.signum(func.apply(b) - b) != 0)
+            throw new RuntimeException("Для данных условий задачи не существует единственный корень");
 
         while(a <= b){
 
             double val = func.apply(a);
             if(val < startA || val > b){
-                throw new RuntimeException("Error");
+                System.err.println("Возможно ответ в простых итерациях не сойдется");
+            }
+
+            double nulVal = func.apply(a) - a;
+            if(Double.isNaN(nulVal)){
+                throw new RuntimeException("Заданная функция не имеет значения на заданном промежутке");
+            }
+            if(a != startA && sgn*(nulVal - oldVal) < 0){
+                throw new RuntimeException("Для данных условий задачи не существует единственный корень");
             }
 
             q = Math.max(Math.abs(differentiate(func).apply(a)), q); //Всегда выводить в конце
@@ -39,7 +52,7 @@ public class SimpleIterationSolver{
         }
 
         if(q >= 1) {
-            throw new RuntimeException("Error");
+            System.err.println("Возможно ответ в простых итерациях не сойдется");
         }
 
 
@@ -56,6 +69,7 @@ public class SimpleIterationSolver{
 
         }
 
+        System.out.printf("Корень был найден за %d итераций с конечной ошибкой %f\nq = %f\n", iter, error, q);
         return xVal;
 
     }
