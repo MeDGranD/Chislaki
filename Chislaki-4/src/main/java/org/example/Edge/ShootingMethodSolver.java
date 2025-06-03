@@ -8,7 +8,7 @@ import org.example.SolutionPoint;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShootingMethodSolver {
+public class ShootingMethodSolver { //TODO: система в кон-раз + порядок точности 2 + рода условий 2+3
     private static final double x_start = 1.0;
     private static final double x_end = 2.0;
     private static final double y_prime_at_x_start = 3 * Math.E;
@@ -46,6 +46,7 @@ public class ShootingMethodSolver {
 
         for (int i = 0; i < maxIterations; i++) {
             if (Math.abs(fx1) < tolerance) {
+                System.out.printf("Optimal eta was found by %d iteration\n", i+1);
                 return x1;
             }
             if (Math.abs(fx1 - fx0) < 1e-12) {
@@ -64,7 +65,7 @@ public class ShootingMethodSolver {
                 return Double.NaN;
             }
         }
-        System.err.println("Secant method: Maximum iterations reached without convergence.");
+        System.err.printf("Secant method: Maximum iterations (%d) reached without convergence.\n", maxIterations);
         return x1;
     }
 
@@ -79,17 +80,6 @@ public class ShootingMethodSolver {
         if (Math.abs(eta0 - eta1) < 1e-9) eta1 = eta0 + 0.1;
 
         double optimal_eta = secantMethod(ShootingMethodSolver::evaluateBoundaryConditionAtXEnd, eta0, eta1, eta_tolerance, max_eta_iterations, h_ode_solver);
-
-        if (Double.isNaN(optimal_eta)) {
-            System.err.println("Shooting method: Failed to find optimal eta.");
-            eta0 = 1.0; eta1 = 5.0;
-            System.err.println("Shooting method: Retrying eta search with eta0=" + eta0 + ", eta1=" + eta1);
-            optimal_eta = secantMethod(ShootingMethodSolver::evaluateBoundaryConditionAtXEnd, eta0, eta1, eta_tolerance, max_eta_iterations, h_ode_solver);
-            if (Double.isNaN(optimal_eta)) {
-                System.err.println("Shooting method: Failed to find optimal eta on retry.");
-                return null;
-            }
-        }
 
         System.out.printf("Shooting method: Optimal eta (y(%.1f)) found: %.7E\n", x_start, optimal_eta);
 

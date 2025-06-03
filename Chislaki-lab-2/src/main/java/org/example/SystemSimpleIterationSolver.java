@@ -66,7 +66,7 @@ public class SystemSimpleIterationSolver{
             currentA += stepA;
         }
 
-        if(q >= 1-1e8) {
+        if(q >= 1-1e5) {
             System.err.println("Возможно ответ в простых итерациях не сойдется");
         }
 
@@ -91,7 +91,11 @@ public class SystemSimpleIterationSolver{
             for (int i = 0; i < n; i++) {
                 diffVector[i] = xCurrent[i] - xPrevious[i];
             }
-            error = new ArrayRealVector(diffVector).getLInfNorm() * (q/(1-q));
+            if(q >= 1-1e5) {
+                error = new ArrayRealVector(diffVector).getLInfNorm();
+            }
+            else
+                error = new ArrayRealVector(diffVector).getLInfNorm() * (q/(1-q));
 
         }
 

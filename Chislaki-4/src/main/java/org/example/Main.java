@@ -1,14 +1,33 @@
 package org.example;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.example.Edge.*;
 import org.example.Koshi.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
-public class Main {
-    public static void main(String[] args) {
+public class Main { //TODO: поставить дурпгие начальные условия на основе точного решения
+
+    static class TestCase{
+        @JsonProperty("h")
+        double h;
+        @JsonProperty("tolerance")
+        double tolerance;
+        @JsonProperty("maxIter")
+        int maxIter;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        InputStream is = Main.class.getClassLoader().getResourceAsStream("test.json");
+        TestCase testCases = mapper.readValue(is, new TypeReference<>() {});
 
         @FunctionalInterface
         interface SolverFunction {
@@ -24,16 +43,16 @@ public class Main {
         for(var solver : solvers){
             List<SolutionPoint> answer = solver.apply(
                     0,
-                    new ArrayRealVector(new double[]{0.0, 1.0}),
+                    new ArrayRealVector(new double[]{1.841471, 0}),
                     1,
-                    0.1,
+                    testCases.h,
                     new ODE()
             );
             List<SolutionPoint> answer2 = solver.apply(
                     0,
-                    new ArrayRealVector(new double[]{0.0, 1.0}),
+                    new ArrayRealVector(new double[]{1.841471, 0}),
                     1,
-                    0.2,
+                    2 * testCases.h,
                     new ODE()
             );
             System.out.printf("%-8s | %-15s | %-15s | %-15s | %-15s\n",
@@ -61,10 +80,18 @@ public class Main {
         System.out.println("------------------------------------------------------------------------------------");
         System.out.println("Метод: Метод Стрельбы");
         System.out.println("------------------------------------------------------------------------------------");
-        List<SolutionPoint> sol_shooting_h = ShootingMethodSolver.solve(1e-7, 100, 0.1);
+        List<SolutionPoint> sol_shooting_h = ShootingMethodSolver.solve(
+                testCases.tolerance,
+                testCases.maxIter,
+                testCases.h
+        );
 
         int p_shooting = 4;
-        List<SolutionPoint> sol_shooting_2h_internal_step = ShootingMethodSolver.solve(1e-7, 100, 0.2);
+        List<SolutionPoint> sol_shooting_2h_internal_step = ShootingMethodSolver.solve(
+                testCases.tolerance,
+                testCases.maxIter,
+                2 * testCases.h
+        );
 
 
         if (sol_shooting_h != null && !sol_shooting_h.isEmpty()) {
@@ -80,8 +107,8 @@ public class Main {
         System.out.println("------------------------------------------------------------------------------------");
         System.out.println("Метод: Конечно-разностный метод");
         System.out.println("------------------------------------------------------------------------------------");
-        List<SolutionPoint> sol_fdm_h = FiniteDifferenceMethodSolver.solve(0.1);
-        List<SolutionPoint> sol_fdm_2h = FiniteDifferenceMethodSolver.solve(2 * 0.1);
+        List<SolutionPoint> sol_fdm_h = FiniteDifferenceMethodSolver.solve(testCases.h);
+        List<SolutionPoint> sol_fdm_2h = FiniteDifferenceMethodSolver.solve(2 * testCases.h);
         int p_fdm = 2;
 
         if (sol_fdm_h != null && !sol_fdm_h.isEmpty()) {

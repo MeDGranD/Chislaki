@@ -62,14 +62,17 @@ public class CubicSplineInterpolator implements Interpolator{
         b = new double[n + 1];
         d = new double[n + 1];
 
-        for(int i = 0; i < n + 1; ++i) {
-            a[i] = points.get(i).getY();
+        for(int i = 0; i < n + 1; ++i){
             if(i == 0){
                 c[i] = 0;
             }
             else{
                 c[i] = cValue.getEntry(i - 1);
             }
+        }
+
+        for(int i = 0; i < n + 1; ++i) {
+            a[i] = points.get(i).getY();
             if(i == n){
                 b[i] = (points.get(i + 1).getY() - points.get(i).getY()) / h[i] - (2d / 3) * h[i] * c[i];
                 d[i] = -c[i] / (3 * h[i]);
